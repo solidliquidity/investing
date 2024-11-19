@@ -7,6 +7,8 @@ from ibapi.contract import Contract
 from ibapi.common import *
 import threading
 import time
+import matplotlib.pyplot as plt
+import pandas as pd
 
 
 class IBKRClient(EWrapper, EClient):
@@ -44,7 +46,8 @@ class IBKRClient(EWrapper, EClient):
             "Unrealized PNL": unrealizedPNL,
             "Realized PNL": realizedPNL,
         })
-        print(f"Portfolio Update - {contract.symbol}: {position} shares at {marketPrice} USD.")
+        print(
+            f"Portfolio Update - {contract.symbol}: {position} shares at {marketPrice} USD.")
 
     def accountDownloadEnd(self, accountName):
         print(f"Portfolio Download Complete for Account: {accountName}")
@@ -53,8 +56,6 @@ class IBKRClient(EWrapper, EClient):
 def run_loop(client):
     client.run()
 
-import matplotlib.pyplot as plt
-import pandas as pd
 
 class PortfolioVisualizer:
     def __init__(self, style="ggplot"):
@@ -70,7 +71,11 @@ class PortfolioVisualizer:
             title (str): Chart title.
         """
         plt.figure(figsize=(10, 6))
-        plt.plot(data["Date"], data["Value"], label="Portfolio Value", marker="o")
+        plt.plot(
+            data["Date"],
+            data["Value"],
+            label="Portfolio Value",
+            marker="o")
         plt.title(title)
         plt.xlabel("Date")
         plt.ylabel("Value (USD)")
@@ -90,7 +95,8 @@ class PortfolioVisualizer:
         plt.figure(figsize=(8, 8))
         plt.pie(sizes, labels=labels, autopct="%1.1f%%", startangle=140)
         plt.title(title)
-        plt.axis("equal")  # Equal aspect ratio ensures the pie chart is circular.
+        # Equal aspect ratio ensures the pie chart is circular.
+        plt.axis("equal")
         plt.show()
 
     def plot_unrealized_pnl(self, data, title="Unrealized P&L"):
@@ -101,7 +107,11 @@ class PortfolioVisualizer:
             title (str): Chart title.
         """
         plt.figure(figsize=(10, 6))
-        plt.bar(data["Asset"], data["Unrealized P&L"], color="dodgerblue", edgecolor="black")
+        plt.bar(
+            data["Asset"],
+            data["Unrealized P&L"],
+            color="dodgerblue",
+            edgecolor="black")
         plt.title(title)
         plt.xlabel("Asset")
         plt.ylabel("Unrealized P&L (USD)")
@@ -110,7 +120,8 @@ class PortfolioVisualizer:
         plt.tight_layout()
         plt.show()
 
-    def interactive_portfolio_value(self, data, title="Portfolio Value Over Time"):
+    def interactive_portfolio_value(
+            self, data, title="Portfolio Value Over Time"):
         """
         Interactive line chart using Plotly.
         Args:
@@ -122,15 +133,20 @@ class PortfolioVisualizer:
         fig.add_trace(go.Scatter(x=data["Date"], y=data["Value"],
                                  mode="lines+markers",
                                  name="Portfolio Value"))
-        fig.update_layout(title=title, xaxis_title="Date", yaxis_title="Value (USD)")
+        fig.update_layout(
+            title=title,
+            xaxis_title="Date",
+            yaxis_title="Value (USD)")
         fig.show()
+
 
 if __name__ == "__main__":
     # Create the client
     app = IBKRClient()
 
     # Connect to TWS or IB Gateway
-    app.connect("127.0.0.1", 7497, clientId=1)  # Use port 7496 for live accounts
+    # You have to check on the IB gateway what port you're using.
+    app.connect("127.0.0.1", 4001, clientId=1)
 
     # Start the API thread
     api_thread = threading.Thread(target=run_loop, args=(app,), daemon=True)

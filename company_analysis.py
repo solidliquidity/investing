@@ -14,7 +14,8 @@ class Company:
     class ProfitabilityMetrics:
         @staticmethod
         def eps(financials):
-            return (financials['net_income'] - financials['preferred_dividends']) / financials['common_shares_outstanding']
+            return (financials['net_income'] - financials['preferred_dividends']
+                    ) / financials['common_shares_outstanding']
 
         @staticmethod
         def roe(financials):
@@ -23,11 +24,13 @@ class Company:
     class LiquidityMetrics:
         @staticmethod
         def current_ratio(financials):
-            return financials['current_assets'] / financials['current_liabilities']
+            return financials['current_assets'] / \
+                financials['current_liabilities']
 
         @staticmethod
         def quick_ratio(financials):
-            return (financials['current_assets'] - financials['inventory']) / financials['current_liabilities']
+            return (financials['current_assets'] - financials['inventory']
+                    ) / financials['current_liabilities']
 
     class SolvencyMetrics:
         @staticmethod
@@ -46,7 +49,8 @@ class Company:
     class ValuationMetrics:
         @staticmethod
         def price_to_earnings(financials):
-            eps = (financials['net_income'] - financials['preferred_dividends']) / financials['common_shares_outstanding']
+            eps = (financials['net_income'] - financials['preferred_dividends']
+                   ) / financials['common_shares_outstanding']
             return financials['market_price_per_share'] / eps
 
     def calculate_metrics(self):
