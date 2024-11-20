@@ -23,16 +23,29 @@ class Company:
                 return f"Error: {e}"
 
         def roe(self):
-            """Return on Equity = Net Income / Average Equity"""
+            """Return on Equity = Net Income / Average Equity
+            Assume common shareholders' equity 
+            Common equity includes: common stock, retained earnings, additional paid-in capital. 
+            Not preferred equity or minor interest
+            Using the average ensures the equity base is representative of the entire period.
+            Common mistakes: 
+            1. Not adjusting for preferred dividends when preferred stock exists can misstate ROE.
+            2. Using total equity instead of common equity leads to inflated or inaccurate ROE.
+            3. Using only the ending equity figure can distort the results, especially if equity fluctuates during the period.
+            """
+            average_equity = (self.financials['Common Stock Equity'].values[0] + self.financials['Common Stock Equity'].values[1]) / 2
             try:
-                return self.financials['Net Income'] / self.financials['Average Total Equity']
+                return self.financials['Net Income'] / average_equity
             except (KeyError, ZeroDivisionError) as e:
                 return f"Error: {e}"
 
         def gross_margin(self):
-            """Gross Margin = (Revenue - Cost of Revenue) / Revenue"""
+            """Gross Margin = (Revenue - Cost of Revenue) / Revenue
+            1. Incorrect revenue / COGS. Ensure that COGS only includes direct costs (e.g., materials, labor) and excludes operating expenses like rent or marketing.
+            2. Negative value. This can occur if COGS exceeds revenue, indicating unsustainable pricing or production inefficiencies.
+            """
             try:
-                return (self.financials['Total Revenue'] - self.financials['Reconciled Cost of Revenue']) / self.financials['Total Revenue']
+                return (self.financials['Total Revenue'] - self.financials['Reconciled Cost Of Revenue']) / self.financials['Total Revenue']
             except (KeyError, ZeroDivisionError) as e:
                 return f"Error: {e}"
 
