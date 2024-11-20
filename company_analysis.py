@@ -64,21 +64,21 @@ class Company:
         def current_ratio(self):
             """Current Ratio = Current Assets / Current Liabilities"""
             try:
-                return self.financials['Total Current Assets'] / self.financials['Total Current Liabilities']
+                return self.financials['Current Assets'] / self.financials['Current Liabilities']
             except (KeyError, ZeroDivisionError) as e:
                 return f"Error: {e}"
 
         def quick_ratio(self):
             """Quick Ratio = (Current Assets - Inventory) / Current Liabilities"""
             try:
-                return (self.financials['Total Current Assets'] - self.financials['Inventory']) / self.financials['Total Current Liabilities']
+                return (self.financials['Current Assets'] - self.financials['Inventory']) / self.financials['Current Liabilities']
             except (KeyError, ZeroDivisionError) as e:
                 return f"Error: {e}"
 
         def cash_ratio(self):
             """Cash Ratio = Cash / Current Liabilities"""
             try:
-                return self.financials['Cash and Cash Equivalents'] / self.financials['Total Current Liabilities']
+                return self.financials['Cash And Cash Equivalents'] / self.financials['Current Liabilities']
             except (KeyError, ZeroDivisionError) as e:
                 return f"Error: {e}"
 
