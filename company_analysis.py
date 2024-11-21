@@ -90,7 +90,7 @@ class Company:
         def debt_to_equity(self):
             """Debt-to-Equity Ratio = Total Debt / Total Equity"""
             try:
-                return self.financials['Total Debt'] / self.financials['Total Equity']
+                return self.financials['Total Debt'] / self.financials['Stockholders Equity']
             except (KeyError, ZeroDivisionError) as e:
                 return f"Error: {e}"
 
@@ -104,7 +104,7 @@ class Company:
         def financial_leverage(self):
             """Financial Leverage = Total Assets / Total Equity"""
             try:
-                return self.financials['Total Assets'] / self.financials['Total Equity']
+                return self.financials['Total Assets'] / self.financials['Stockholders Equity']
             except (KeyError, ZeroDivisionError) as e:
                 return f"Error: {e}"
 
@@ -129,8 +129,9 @@ class Company:
 
         def receivables_turnover(self):
             """Receivables Turnover = Total Revenue / Average Receivables"""
+            average_receivables = (self.financials['Receivables'].values[0] + self.financials['Receivables'].values[1]) / 2
             try:
-                return self.financials['Total Revenue'] / self.financials['Average Receivables']
+                return self.financials['Total Revenue'] / average_receivables
             except (KeyError, ZeroDivisionError) as e:
                 return f"Error: {e}"
 
@@ -150,15 +151,16 @@ class Company:
         def price_to_book(self):
             """P/B Ratio = Market Price per Share / (Total Equity / Basic Shares Outstanding)"""
             try:
-                book_value_per_share = self.financials['Total Equity'] / self.financials['Basic Average Shares']
+                book_value_per_share = self.financials['Stockholders Equity'] / self.financials['Basic Average Shares']
                 return self.financials['Market Price Per Share'] / book_value_per_share
             except (KeyError, ZeroDivisionError) as e:
                 return f"Error: {e}"
 
         def ev_to_ebitda(self):
             """EV/EBITDA = (Market Cap + Total Debt - Cash) / EBITDA"""
+            market_cap = self.financials['Market Price Per Share'] * self.financials['Basic Average Shares']
             try:
-                enterprise_value = self.financials['Market Cap'] + self.financials['Total Debt'] - self.financials['Cash and Cash Equivalents']
+                enterprise_value = market_cap + self.financials['Total Debt'] - self.financials['Cash And Cash Equivalents']
                 return enterprise_value / self.financials['Normalized EBITDA']
             except (KeyError, ZeroDivisionError) as e:
                 return f"Error: {e}"
